@@ -1,13 +1,15 @@
 import requests
 import json
-from pymongo import MongoClient
+from pymongo import *
 from pprint import pprint
+
+#Il faut installer ça : python3 -m pip install 'mongo[srv]' dnspython
 
 def get_vLille():
 
     #On tente de se connecter à la base de donnée
     try:
-        client = MongoClient("mongodb+srv://admin:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
+        client = MongoClient("mongodb+srv://dbUser:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
         print("Connection réussie")
     except:
         print("Impossible de se connecter")
