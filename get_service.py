@@ -1,11 +1,12 @@
 import requests
 import json
+from get_Api_Url import getApi
 from pymongo import *
 from pprint import pprint
 
 #Il faut installer ça : python3 -m pip install 'mongo[srv]' dnspython
 
-def get_vLille():
+def get_vVille(ville):
 
     #On tente de se connecter à la base de donnée
     try:
@@ -14,65 +15,19 @@ def get_vLille():
     except:
         print("Impossible de se connecter")
     db = client.info_velo
-    lille = db.lille
+    #On créé un dictionnaire des collections de ville : 
+    listOfCollection = {"lille" : db.lille, "lyon" : db.lyon, "rennes" : db.rennes, "paris" :  db.paris}
+    #On récupère la bonne collection
+    collection_ville = listOfCollection[ville]
 
-    #On récupère les infos de l'api
-    url = "https://opendata.lillemetropole.fr/api/records/1.0/search/?dataset=vlille-realtime&q=&rows=10&facet=libelle&facet=nom&facet=commune&facet=etat&facet=type&facet=etatconnexion&refine.commune=LILLE"
+    #On récupère la bonne adresse api pour la ville passée en paramètre
+    url = getApi(ville)
     reponse = requests.request("GET", url)
     reponse_json = json.loads(reponse.text.encode('utf8'))
-    lille.insert_one(reponse_json)
-    cursor = lille.find({})
-    #for document in cursor: 
-    #    pprint(document)
+    collection_ville.drop()
+    collection_ville.insert_one(reponse_json)
 
-def get_vLyon():
-    try:
-        client = MongoClient("mongodb+srv://dbUser:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
-        print("Connection réussie")
-    except:
-        print("Impossible de se connecter")
-    db = client.info_velo
-    lyon = db.lyon
-
-    url = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=station-velov-grand-lyon&q=&facet=name&facet=commune&facet=bonus&facet=status&facet=available&facet=availabl_1&facet=availabili&facet=availabi_1&facet=last_upd_1"
-    reponse = requests.request("GET", url)
-    reponse_json = json.loads(reponse.text.encode('utf8'))
-    lyon.insert_one(reponse_json)
-    cursor = lyon.find({})
-
-def get_vParis():
-    try:
-        client = MongoClient("mongodb+srv://dbUser:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
-        print("Connection réussie")
-    except:
-        print("Impossible de se connecter")
-    db = client.info_velo
-    paris = db.paris
-
-    url = "https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel&q=&facet=name&facet=is_installed&facet=is_renting&facet=is_returning&facet=nom_arrondissement_communes"
-    reponse = requests.request("GET", url)
-    reponse_json = json.loads(reponse.text.encode('utf8'))
-    paris.insert_one(reponse_json)
-    cursor = paris.find({})
-
-def get_vRennes():
-    try:
-        client = MongoClient("mongodb+srv://dbUser:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
-        print("Connection réussie")
-    except:
-        print("Impossible de se connecter")
-    db = client.info_velo
-    rennes = db.rennes
-
-    url = "https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=etat-des-stations-le-velo-star-en-temps-reel&q=&facet=nom&facet=etat&facet=nombreemplacementsactuels&facet=nombreemplacementsdisponibles&facet=nombrevelosdisponibles"
-    reponse = requests.request("GET", url)
-    reponse_json = json.loads(reponse.text.encode('utf8'))
-    rennes.insert_one(reponse_json)
-    cursor = rennes.find({})
-
-get_vLille()
-get_vLyon()
-get_vParis()
-get_vRennes()
-
-
+get_vVille('lille')
+get_vVille('paris')
+get_vVille('rennes')
+get_vVille('lyon')
