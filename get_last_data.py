@@ -22,8 +22,13 @@ def get_vVille(ville):
     url = getApi(ville)
     reponse = requests.request("GET", url)
     reponse_json = json.loads(reponse.text.encode('utf8'))
-    collection_ville.drop()
-    collection_ville.insert_one(reponse_json)
+    if ville == "lyon":
+        data = reponse_json.get("values", [])
+    else : 
+        data = reponse_json.get("records", [])  
+    collection_ville.drop()  
+    for station in data :
+        collection_ville.insert_one(station)
 
 get_vVille('lille')
 get_vVille('paris')
