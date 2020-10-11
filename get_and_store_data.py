@@ -3,10 +3,9 @@ import json
 from get_Api_Url import getApi
 from pymongo import *
 from pprint import pprint
+import time
 
-#Il faut installer ça : python3 -m pip install 'mongo[srv]' dnspython
-
-def get_vVille(ville):
+def get_and_store_data(ville):
 
     #On tente de se connecter à la base de donnée
     try:
@@ -14,7 +13,7 @@ def get_vVille(ville):
         print("Connection réussie")
     except:
         print("Impossible de se connecter")
-    db = client.info_velo
+    db = client.history_data
     #On créé un dictionnaire des collections de ville : 
     listOfCollection = {"lille" : db.lille, "lyon" : db.lyon, "rennes" : db.rennes, "paris" :  db.paris}
     #On récupère la bonne collection
@@ -24,10 +23,4 @@ def get_vVille(ville):
     url = getApi(ville)
     reponse = requests.request("GET", url)
     reponse_json = json.loads(reponse.text.encode('utf8'))
-    collection_ville.drop()
     collection_ville.insert_one(reponse_json)
-
-get_vVille('lille')
-get_vVille('paris')
-get_vVille('rennes')
-get_vVille('lyon')
