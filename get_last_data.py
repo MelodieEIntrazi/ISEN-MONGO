@@ -12,9 +12,11 @@ def get_vVille(ville):
         print("Connection réussie")
     except:
         print("Impossible de se connecter")
+
     db = client.info_velo
     #On créé un dictionnaire des collections de ville : 
     listOfCollection = {"lille" : db.lille, "lyon" : db.lyon, "rennes" : db.rennes, "paris" :  db.paris}
+    listSetData = {"lille" : setLille(), "lyon" : setLyon(), "rennes" : setRennes(), "paris" :  setParis()}
     #On récupère la bonne collection
     collection_ville = listOfCollection[ville]
 

@@ -24,3 +24,8 @@ def get_and_store_data(ville):
     reponse = requests.request("GET", url)
     reponse_json = json.loads(reponse.text.encode('utf8'))
     collection_ville.insert_one(reponse_json)
+
+get_and_store_data("lille")
+get_and_store_data("rennes")
+get_and_store_data("paris")
+get_and_store_data("lyon")
