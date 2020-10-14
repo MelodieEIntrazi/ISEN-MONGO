@@ -3,6 +3,7 @@ import json
 from get_Api_Url import getApi
 from pymongo import *
 from pprint import pprint
+from set_data_ville import *
 
 def get_vVille(ville):
 
@@ -16,7 +17,6 @@ def get_vVille(ville):
     db = client.info_velo
     #On créé un dictionnaire des collections de ville : 
     listOfCollection = {"lille" : db.lille, "lyon" : db.lyon, "rennes" : db.rennes, "paris" :  db.paris}
-    listSetData = {"lille" : setLille(), "lyon" : setLyon(), "rennes" : setRennes(), "paris" :  setParis()}
     #On récupère la bonne collection
     collection_ville = listOfCollection[ville]
 
@@ -28,11 +28,20 @@ def get_vVille(ville):
         data = reponse_json.get("values", [])
     else : 
         data = reponse_json.get("records", [])  
-    collection_ville.drop()  
-    for station in data :
-        collection_ville.insert_one(station)
+    collection_ville.drop() 
+
+    if ville == 'lille' : 
+        data_to_insert = set_data_lille(data)
+    elif ville == 'paris' : 
+        data_to_insert = set_data_paris(data)
+    elif ville == 'lyon' :
+        data_to_insert = set_data_lyon(data)
+    else :
+        data_to_insert = set_data_rennes(data)
+
+    collection_ville.insert_many(data_to_insert)
 
 get_vVille('lille')
 get_vVille('paris')
-get_vVille('rennes')
-get_vVille('lyon')
+#get_vVille('rennes')
+#get_vVille('lyon')
