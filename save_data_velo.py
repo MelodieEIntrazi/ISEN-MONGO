@@ -3,7 +3,7 @@ import json
 from get_Api_Url import getApi
 from pymongo import *
 from pprint import pprint
-from set_last_data_ville import *
+from set_data_ville import *
 
 def get_vVille(ville):
 
@@ -14,11 +14,10 @@ def get_vVille(ville):
     except:
         print("Impossible de se connecter")
 
-    db = client.info_velo
-    #On créé un dictionnaire des collections de ville : 
-    listOfCollection = {"lille" : db.lille, "lyon" : db.lyon, "rennes" : db.rennes, "paris" :  db.paris}
+    db = client.history_data
     #On récupère la bonne collection
-    collection_ville = listOfCollection[ville]
+    collection_ville = db.data_velo
+    collection_ville.drop()
 
     #On récupère la bonne adresse api pour la ville passée en paramètre
     url = getApi(ville)
@@ -28,8 +27,6 @@ def get_vVille(ville):
         data = reponse_json.get("values", [])
     else : 
         data = reponse_json.get("records", [])  
-
-    collection_ville.drop()
     
     if ville == 'lille' : 
         data_to_insert = set_data_lille(data)
