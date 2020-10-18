@@ -30,8 +30,6 @@ def get_vVille(ville):
     else : 
         data = reponse_json.get("records", [])  
 
-    collection_ville.drop()
-    
     if ville == 'lille' : 
         data_to_insert = set_data_lille(data)
     elif ville == 'paris' : 
