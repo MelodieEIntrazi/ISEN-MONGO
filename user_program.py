@@ -2,6 +2,7 @@ import requests
 import json
 from pymongo import *
 from pprint import pprint
+from bson.son import SON
 
 def user(ville, lat, lon):
 
@@ -18,6 +19,9 @@ def user(ville, lat, lon):
     #On récupère la bonne collection
     collection_ville = listOfCollection[ville]
 
-    list_stations = collection_ville.find({"geometry" : {'$near' : [lon, lat], '$maxDistance': 0.10}})
-    list_stations_2 = collection_ville.find({"geometry": {'$near': {'$geometry': {type:"Point", "coordinates":[lon,lat]}, '$maxDistance':500 }}})
-    
+    collection_ville.ensure_index([("geometry", GEOSPHERE)])
+    query = collection_ville.find({"geometry" : SON([("$near", { "$geometry" : SON([("type", "Point"), ("coordinates", [lon, lat])])})])})
+    for i in query:
+        print(i)
+
+user("lille", 50.62486, 3.116677)
