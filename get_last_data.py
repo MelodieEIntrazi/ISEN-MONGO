@@ -5,16 +5,17 @@ from pymongo import *
 from pprint import pprint
 from set_last_data_ville import *
 
+#On tente de se connecter à la base de donnée
+try:
+    client = MongoClient("mongodb+srv://dbUser:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
+    print("Connection réussie")
+except:
+    print("Impossible de se connecter")
+
+db = client.info_velo
+
 def get_vVille(ville):
 
-    #On tente de se connecter à la base de donnée
-    try:
-        client = MongoClient("mongodb+srv://dbUser:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
-        print("Connection réussie")
-    except:
-        print("Impossible de se connecter")
-
-    db = client.info_velo
     #On créé un dictionnaire des collections de ville : 
     listOfCollection = {"lille" : db.lille, "lyon" : db.lyon, "rennes" : db.rennes, "paris" :  db.paris}
     #On récupère la bonne collection
