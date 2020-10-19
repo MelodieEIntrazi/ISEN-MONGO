@@ -4,6 +4,7 @@ from get_Api_Url import getApi
 from pymongo import *
 from pprint import pprint
 from set_last_data_ville import *
+import time
 
 #On tente de se connecter à la base de donnée
 
@@ -41,8 +42,9 @@ def get_vVille(ville):
 
     collection_ville.insert_many(data_to_insert)
 
-
-get_vVille('paris')
-get_vVille('rennes')
-get_vVille('lyon')
-get_vVille('lille')
+while True : 
+    get_vVille('paris')
+    get_vVille('rennes')
+    get_vVille('lyon')
+    get_vVille('lille')
+    time.sleep(300)

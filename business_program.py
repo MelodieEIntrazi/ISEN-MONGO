@@ -11,7 +11,10 @@ except:
     
 db = client.info_velo
 
-def get_station_by_name(ville, name):
+def get_station_by_name(ville):
+
+    name = input("Entrer le nom de la station recherchée : ")
+    print(name)
 
     #On créé un dictionnaire des collections de ville : 
     listOfCollection = {"lille" : db.lille, "lyon" : db.lyon, "rennes" : db.rennes, "paris" :  db.paris}
@@ -31,5 +34,4 @@ def delete_station(ville, name):
 
     list_stations = collection_ville.delete_many({"name": {"$regex" : name}})
 
-get_station_by_name('lille', 'Flers')
-delete_station('lille', 'Flers')
+get_station_by_name('lille')
