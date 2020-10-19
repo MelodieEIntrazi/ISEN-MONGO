@@ -17,7 +17,6 @@ def get_vVille(ville):
     db = client.history_data
     #On récupère la bonne collection
     collection_ville = db.data_velo
-    collection_ville.drop()
 
     #On récupère la bonne adresse api pour la ville passée en paramètre
     url = getApi(ville)
