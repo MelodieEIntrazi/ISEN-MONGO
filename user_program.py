@@ -4,7 +4,7 @@ from pymongo import *
 from pprint import pprint
 from bson.son import SON
 
-def user(ville, lat, lon):
+def user(ville, lat, lon, max_dist):
 
     try:
         client = MongoClient("mongodb+srv://dbUser:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
@@ -19,9 +19,10 @@ def user(ville, lat, lon):
     #On récupère la bonne collection
     collection_ville = listOfCollection[ville]
 
-    collection_ville.ensure_index([("geometry", GEOSPHERE)])
-    query = collection_ville.find({"geometry" : SON([("$near", { "$geometry" : SON([("type", "Point"), ("coordinates", [lon, lat])])})])})
-    for i in query:
+    collection_ville.create_index([("geometry", "2dsphere")])
+    query = collection_ville.find({'geometry': {'$near': SON([('$geometry', SON([('type', 'Point'), ('coordinates', [lon, lat])])), ('$maxDistance', max_dist)])}} )
+
+    for i in query.sort("timestamp", -1):
         print(i)
 
-user("lille", 50.62486, 3.116677)
+user("lille", 50.62486, 3.116677, 500)
