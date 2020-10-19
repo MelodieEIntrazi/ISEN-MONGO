@@ -6,9 +6,9 @@ from pprint import pprint
 from set_last_data_ville import *
 import time
 
-#On tente de se connecter à la base de donnée
-
 def get_vVille(ville):
+    
+    #On tente de se connecter à la base de donnée
     try:
         client = MongoClient("mongodb+srv://dbUser:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
         print("Connection réussie")
