@@ -19,12 +19,14 @@ def user(ville, lat, lon, max_dist):
     #On récupère la bonne collection
     collection_ville = listOfCollection[ville]
 
+    #On crée un index et on cherche toutes les stations proches du user
     collection_ville.create_index([("geometry", "2dsphere")])
     query = collection_ville.find({'geometry': {'$near': SON([('$geometry', SON([('type', 'Point'), ('coordinates', [lon, lat])])), ('$maxDistance', max_dist)])}}).sort("timestamp", -1)
     list_stations_name = query.distinct("name")
-
+    station = query[0]
     print("\n", ville, "/ Latitude :", lat, "- Longitude :", lon, "/ Distance max :", max_dist, "mètres")
     
+    #S'il y a plusieurs stations qui sont proches :
     if(len(list_stations_name) > 1) :
         print("Les stations suivantes se situent près de vous :")
         i = 0
@@ -34,6 +36,7 @@ def user(ville, lat, lon, max_dist):
         number_station = int(input("Choissisez le numéro de la station voulue : " ))
         name_station = list_stations_name[number_station]
         station = collection_ville.find({"name": {"$regex" : name_station}}).sort("timestamp", -1)[0]
+    
     print(station)
 
 user("lille", 50.634272, 3.04876, 1000)
