@@ -43,7 +43,6 @@ def descativate(ville):
             station = collection_ville.find({"name": {"$regex" : station_name}}).sort("timestamp", -1)[0]
             print(station)
     else:
-        print("dans else")
         collection_ville.update_many({"name" : list_stations_name[0]}, {"$set" : {"en service" : False}})
         print("Une station est dans le polygone : ", list_stations_name[0])
         print("Elle a été désactivée : \n" , station)
