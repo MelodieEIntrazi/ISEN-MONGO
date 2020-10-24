@@ -25,7 +25,9 @@ def calculate_average(ville):
         {"$addFields" : {"date":{"$toDate" : "$timestamp"}}},
         {"$addFields" : {"dayOfWeek":{"$isoDayOfWeek" : "$date"}}},
         {"$addFields" : {"heure":{"$hour" : "$date"}}},
+        #Filtre pour n'avoir que les heures de 8h à 10h
         {"$match" : {"heure" : {"$in" : [8,10]}}},
+        #Filtre pour n'avoir que les jours du lundi au vendredi
         {"$match" : {"dayOfWeek" : {"$in" : [1,5]}}},
         {"$group" : {"_id": "$name",
             "total_velo" : {"$sum" : "$nbvelosdispo"}, 
