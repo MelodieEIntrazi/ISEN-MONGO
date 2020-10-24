@@ -5,7 +5,7 @@ import pymongo
 from pprint import pprint
 
 
-def calculte_average(ville):
+def calculate_average(ville):
         
     #On tente de se connecter à la base de donnée
     try:
@@ -23,8 +23,10 @@ def calculte_average(ville):
 
     liste = collection_ville.aggregate([
         {"$addFields" : {"date":{"$toDate" : "$timestamp"}}},
+        {"$addFields" : {"dayOfWeek":{"$isoDayOfWeek" : "$date"}}},
         {"$addFields" : {"heure":{"$hour" : "$date"}}},
         {"$match" : {"heure" : {"$in" : [8,10]}}},
+        {"$match" : {"dayOfWeek" : {"$in" : [1,5]}}},
         {"$group" : {"_id": "$name",
             "total_velo" : {"$sum" : "$nbvelosdispo"}, 
             "total_place" : {"$sum" : "$nbplacesdispo"}
@@ -39,4 +41,4 @@ def calculte_average(ville):
             print('nom de la station : ', i['_id'], ' avec un ratio de : ', i['ratio'])
         #print('nom : ', i['_id'], 'total : ', i['total'], 'moyenne : ', i['ratio'], 'heure : ', i['heure'])
 
-calculte_average('lyon')
+calculate_average('lille')
