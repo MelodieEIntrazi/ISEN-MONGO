@@ -7,7 +7,7 @@ from pprint import pprint
 
 def calculate_average(ville):
         
-    #On tente de se connecter à la base de donnée
+    #On tente de se connecter à la base de données
     try:
         client = MongoClient("mongodb+srv://dbUser:root@cluster0.5j4lv.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
         print("Connection réussie")

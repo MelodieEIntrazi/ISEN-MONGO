@@ -37,6 +37,10 @@ def user(ville, lat, lon, max_dist):
         name_station = list_stations_name[number_station]
         station = collection_ville.find({"name": {"$regex" : name_station}}).sort("timestamp", -1)[0]
     
+    elif (len(list_stations_name) == 1):
+        print("La station proche de vous est ", list_stations_name[0])
+        print("\n Ses informations :")
+        station = collection_ville.find({"name": {"$regex" : list_stations_name[0]}}).sort("timestamp", -1)[0]
     print(station)
 
 user("lille", 50.634272, 3.04876, 1000)
